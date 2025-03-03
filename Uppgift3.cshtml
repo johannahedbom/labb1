@@ -1,0 +1,34 @@
+@using System.Xml.Linq
+@model XElement
+
+<h1>Uppgift 3 - Beviljade tider</h1>
+
+@if (Model != null && Model.Elements("Arende").Any())
+{
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Tidsintervall</th>
+                <th>Bidragstyp</th>
+                <th>Summa</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var arende in Model.Elements("Arende"))
+            {
+                @foreach (var period in arende.Elements("Period"))
+                {
+                    <tr>
+                        <td>@(period.Element("Tidsintervall")?.Value ?? "Ej tillgängligt")</td>
+                        <td>@(period.Element("Stodform")?.Value ?? "Ej tillgängligt")</td>
+                        <td>@(period.Element("Summa")?.Value ?? "0")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><strong>Ingen data att visa.</strong></p>
+}

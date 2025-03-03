@@ -1,0 +1,43 @@
+@using System.Xml.Linq
+@model XElement
+
+<h1>Uppgift 2 - Utbetalningar och bidragstyper</h1>
+
+@if (Model != null && Model.Elements("Utbetalning").Any())
+{
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Totalsumma</th>
+                <th>Utbetalningar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var utbetalning in Model.Elements("Utbetalning"))
+            {
+                <tr>
+                    <td>@(utbetalning.Element("Datum")?.Value ?? "Ej tillgängligt")</td>
+                    <td>@(utbetalning.Element("TotalSum")?.Value ?? "0")</td>
+                    <td>
+                        <table class="styled-subtable">
+                            <tbody>
+                                @foreach (var bidrag in utbetalning.Element("Bidragstyper")?.Elements("Bidrag") ?? Enumerable.Empty<XElement>())
+                                {
+                                    <tr>
+                                        <td>@(bidrag.Element("Beloppstyp")?.Value ?? "Okänt")</td>
+                                        <td>@(bidrag.Element("Summa")?.Value ?? "0")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><strong>Ingen data att visa.</strong></p>
+}

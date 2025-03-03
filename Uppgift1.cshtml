@@ -1,0 +1,41 @@
+@using System.Xml.Linq
+@model XElement
+
+<h1>Uppgift 1 - Utbetalningar per ärende</h1>
+
+@if (Model != null && Model.Elements("Arende").Any())
+{
+    @foreach (var arende in Model.Elements("Arende"))
+    {
+        <h2>Ärende @arende.Element("Arendenummer").Value</h2>
+        <p><strong>Bidrag:</strong> @arende.Element("Stodform").Value</p>
+
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Status</th>
+                    <th>Summa</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var utbetalning in arende.Element("Utbetalningar").Elements("Utbetalning"))
+                {
+                    <tr>
+                        <td>@utbetalning.Element("UtbetDatum").Value</td>
+                        <td>@utbetalning.Element("UtbetStatus").Value</td>
+                        <td>@utbetalning.Element("Summa").Value</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <p><strong>Total summa:</strong> @arende.Element("TotalSum").Value</p>
+        <p><strong>Utbetald summa:</strong> @arende.Element("PaidSum").Value</p>
+        <p><strong>Kvarvarande summa:</strong> @arende.Element("RemainingSum").Value</p>
+    }
+}
+else
+{
+    <p><strong>Ingen data att visa.</strong></p>
+}
